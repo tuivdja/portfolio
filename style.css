@@ -1,0 +1,34 @@
+/* style.css */
+
+/* Fond uni */
+body {
+  background-color: chocolate; /* bleu clair */
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+/* Fond avec un dégradé */
+/*
+body {
+  background: linear-gradient(to right, #74ebd5, #acb6e5);
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+}
+*/
+
+/* Fond avec une image */
+/*
+body {
+  background-image: url('images/fond.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+}
+*/
+
+h1 {
