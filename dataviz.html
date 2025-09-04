@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Protection des réserves naturelles de la NC</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        body, html {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+        .bg-slideshow {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            z-index: -1;
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+        }
+        .bg-slide {
+            position: absolute;
+            width: 100vw;
+            height: 100vh;
+            object-fit: cover;
+            opacity: 0;
+            transition: opacity 1.5s;
+        }
+        .bg-slide.active {
+            opacity: 1;
+            z-index: 1;
+        }
+        .container, .main-content {
+            max-width: 850px;
+            margin: 48px auto;
+            background: #fafafa;
+            border-radius: 18px;
+            box-shadow: 0 8px 32px rgba(24,90,157,0.10);
+            padding: 40px 32px 32px 32px;
+            position: relative;
+            z-index: 2;
+        }
+        .chaos-content {
+            background: rgba(255,255,255,0.7); /* moins transparent */
+            border: 3px solid #e53935;
+            box-shadow: 0 0 30px #e53935, 0 0 10px #000;
+    /* animation: shake 0.5s infinite alternate;  <-- animation supprimée */
+        }
+        
+        @keyframes shake {
+            0% { transform: translate(0px, 0px) rotate(-1deg);}
+            100% { transform: translate(4px, -2px) rotate(1deg);}
+        }
+        .hidden { display: none; }
+        h1 {
+            color: #185a9d;
+            font-size: 2.6em;
+            margin-bottom: 0.2em;
+            letter-spacing: 1px;
+        }
+        h2 {
+            color: #43cea2;
+            margin-top: 0;
+            font-weight: 400;
+        }
+        .names {
+            font-size: 1.3em;
+            color: #185a9d;
+            margin-bottom: 24px;
+            font-weight: bold;
+        }
+        .intro {
+            font-size: 1.18em;
+            color: #333;
+            line-height: 1.7;
+            margin-bottom: 32px;
+        }
+        .axes {
+            background: #eafaf1;
+            border-left: 5px solid #43cea2;
+            padding: 18px 24px;
+            border-radius: 10px;
+            margin-bottom: 32px;
+        }
+        .axes-title {
+            color: #185a9d;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .start-btn {
+            background: linear-gradient(90deg, #43cea2 0%, #185a9d 100%);
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            padding: 16px 36px;
+            font-size: 1.2em;
+            cursor: pointer;
+            transition: background 0.3s;
+            margin-top: 24px;
+            box-shadow: 0 2px 8px rgba(24,90,157,0.10);
+        }
+        .start-btn:hover {
+            background: linear-gradient(90deg, #185a9d 0%, #43cea2 100%);
+        }
+        .charts {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 36px;
+            justify-content: center;
+            margin-top: 36px;
+        }
+        .chart-container {
+            background: #f8fafc;
+            border-radius: 12px;
+            padding: 18px;
+            box-shadow: 0 2px 8px rgba(67,206,162,0.10);
+            min-width: 260px;
+        }
+        .signature {
+            margin-top: 40px;
+            font-style: italic;
+            color: #185a9d;
+            font-size: 1.1em;
+            text-align: right;
+        }
+        @media (max-width: 900px) {
+            .container, .main-content { padding: 18px 6px; }
+            .charts { flex-direction: column; align-items: center; }
+        }
+        .info-img {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            max-width: 240px;
+        }
+        .info-img span {
+            display: block;
+            margin-top: 8px;
+            color: #b71c1c;
+            font-weight: bold;
+            text-align: center;
+            font-size: 1.08em;
+        }
+        .info-img img {
+            width: 220px;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 12px;
+            box-shadow: 0 2px 12px #e53935;
+        }
+        @media (max-width: 700px) {
+    .chaos-content > div[style*="grid-template-columns"] {
+        grid-template-columns: 1fr;
+    }
+}
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <!-- Slideshow background -->
+<div class="bg-slideshow" id="bgSlideshow">
+    <!-- Vidéo en fond (exemple avec une vidéo mp4, autoplay, muet, boucle) -->
+    <!-- Images de fond -->
+    <img src="https://media.istockphoto.com/id/586061538/fr/photo/island-country-road-dans-sunset-nouvelle-calédonie.jpg?s=612x612&w=0&k=20&c=ndXG41CyzA3oZzEER2w9uRc0luDap1S5IpiOUILeB2s=" class="bg-slide active" alt="Nature NC 1">
+    <img src="https://media.istockphoto.com/id/1359645116/fr/photo/nouméa-nouvelle-calédonie-belle-plage-avec-ciel-bleu-sur-lîle-destinations-de-voyage-pour.jpg?s=612x612&w=0&k=20&c=TVkQZd9Fmy0D94ozEBfcK4iUIFCaejEzaimtd8fh-fQ=" class="bg-slide" alt="Nature NC 2">
+    <img src="https://img.fotocommunity.com/nouvelle-caledonie-cote-est-lever-de-soleil-a-poindimie-01c1a3dc-b324-4859-81fa-e88cccd8c125.jpg?width=1000" class="bg-slide" alt="Nature NC 3">
+    <img src="https://wallpapercat.com/w/full/1/7/e/1621950-1920x1080-desktop-full-hd-new-caledonia-background-image.jpg" class="bg-slide" alt="Nature NC 4">
+    <!-- Images de destruction pour CHAOS 2050 -->
+    <img src="https://www.conservation-nature.fr/wp-content/uploads/2021/08/animaux-marins-1024x565.jpg" class="bg-slide bg-chaos" style="display:none;" alt="Déforestation Chaos">
+    <img src="https://sepia2.unil.ch/wp/diagonal/wp-content/uploads/sites/16/2020/11/dreamstime_m_140820370-1568x948.jpg.webp" class="bg-slide bg-chaos" style="display:none;" alt="Pollution Chaos">
+    <img src="https://www.lopinion.ma/photo/art/default/66550678-47271535.jpg?v=1659862721" class="bg-slide bg-chaos" style="display:none;" alt="Algues Chaos">
+    <img src="https://www.defense.gouv.fr/sites/default/files/terre/2-Deux-pompiers-militaires-du-RIMaP-NC.jpg" class="bg-slide bg-chaos" style="display:none;" alt="Incendies Chaos">
+</div>
+ 
+<!-- Page de présentation -->
+    <div class="container" id="presentation">
+        <h1>Bienvenue sur notre projet</h1>
+        <div class="names">Yoran Tairio, Tui Fuahea et Mickael Seo</div>
+        <div class="intro">
+            Nous participons au concours <b>Blue Pacific 2050</b> qui vise à promouvoir une vision commune pour l’avenir du Pacifique.<br><br>
+            Notre projet s’inscrit dans la <b>Stratégie 2050 pour le continent Pacifique Bleu</b> et met en avant la protection des réserves naturelles de la Nouvelle-Calédonie.<br><br>
+            Nous avons choisi de nous concentrer sur les axes suivants :
+        </div>
+        <div class="axes">
+            <div class="axes-title">Axes du concours abordés par notre projet :</div>
+            <ol>
+                <li><b>Ressources et développement économique</b> : Préserver les réserves naturelles permet de garantir des ressources durables pour les générations futures.</li>
+                <li><b>Changement climatique et catastrophes</b> : Les réserves naturelles jouent un rôle clé dans la lutte contre le changement climatique et la protection contre les catastrophes naturelles.</li>
+                <li><b>Océan et environnement</b> : Notre projet vise à sensibiliser à la préservation de la biodiversité marine et terrestre en Nouvelle-Calédonie.</li>
+            </ol>
+        </div>
+        <button class="start-btn" onclick="showMainContent()">Découvrir le projet</button>
+    </div>
+ 
+    <!-- Page principale (cachée au début) -->
+    <div class="main-content hidden" id="mainContent">
+        <button class="small-btn" onclick="backToPresentation()">&#8592; Retour</button>
+        <h1>Protection des réserves naturelles de la NC</h1>
+        <h2>Par Yoran Tairio, Tui Fuahea et Mickael Seo</h2>
+        <p>
+            La Nouvelle-Calédonie est un véritable joyau de biodiversité, abritant de nombreuses espèces uniques au monde.
+            Les réserves naturelles protègent ces trésors contre la déforestation, la pollution et le braconnage.
+            Grâce à l'engagement des habitants et des autorités, des actions de sensibilisation et de restauration sont menées pour préserver ces espaces précieux.
+        </p>
+        <p>
+            Protéger les réserves naturelles, c'est garantir un avenir durable à la faune, à la flore et aux générations futures de la Nouvelle-Calédonie.
+        </p>
+        <div class="charts">
+            <div class="chart-container">
+                <canvas id="pieChart" width="260" height="260"></canvas>
+            </div>
+            <div class="chart-container">
+                <canvas id="barChart" width="260" height="260"></canvas>
+            </div>
+            <div class="chart-container">
+                <canvas id="lineChart" width="260" height="260"></canvas>
+            </div>
+        </div>
+        <div class="signature">
+            — Yoran Tairio, Tui Fuahea et Mickael Seo
+        </div>
+        <div style="text-align:center; margin-top:40px;">
+            <button class="start-btn" style="background: #e53935;" onclick="showChaosPage()">Et si on ne fait rien ?</button>
+        </div>
+    </div>
+ 
+    <!-- Page CHAOS 2050 (cachée au début) -->
+    <div class="main-content chaos-content hidden" id="chaos2050">
+        <button class="small-btn" onclick="backToPresentation()">&#8592; Retour</button>
+        <h1 style="color:#e53935; text-shadow:2px 2px 8px #000;">2050 : Nos réserves détruites ?</h1>
+        <h2 style="color:#b71c1c;">Un futur à éviter !</h2>
+        <p style="font-size:1.2em; color:#222; background:rgba(255,255,255,0.5); border-radius:10px; padding:12px;">
+            Si rien n'est fait, la Nouvelle-Calédonie pourrait perdre une grande partie de ses richesses naturelles d'ici 2050.<br>
+            <b>Déforestation, pollution, incendies, disparition des espèces...</b> Les conséquences seraient catastrophiques pour la biodiversité, l'économie et la vie des habitants.
+        </p>
+        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 32px; justify-items: center; margin:32px 0;">
+            <div class="info-img"
+                 data-title="Disparition d'espèces"
+                 data-text="De nombreuses espèces endémiques pourraient disparaître à cause de la perte de leur habitat naturel."
+                 data-extra="Exemple : Le Bavayia exsuccida, un gecko unique de Nouvelle-Calédonie, est déjà menacé par la déforestation et l'introduction d'espèces invasives. Si les réserves naturelles disparaissent, ce type d'espèce pourrait s'éteindre définitivement, entraînant un appauvrissement irréversible de la biodiversité locale et mondiale."
+                 data-img="https://www.ofb.gouv.fr/sites/default/files/Images/Photos/Esp%C3%A8ces/Faune/bavayia-exsuccida-thomas-duval.jpg">
+                <img src="https://www.ofb.gouv.fr/sites/default/files/Images/Photos/Esp%C3%A8ces/Faune/bavayia-exsuccida-thomas-duval.jpg" alt="Déforestation" style="width:220px; border-radius:12px; box-shadow:0 2px 12px #e53935;">
+                <span style="margin-top:8px; color:#b71c1c; font-weight:bold;">Disparition de différentes espèces</span>
+            </div>
+            <div class="info-img"
+                 data-title="Pollution"
+                 data-text="La pollution des sols et des eaux menace la santé humaine et animale, et détruit les écosystèmes."
+                 data-extra="Exemple : Les rejets industriels et les déchets plastiques s'accumulent dans les rivières et l'océan, provoquant la mort de poissons, de tortues et d'oiseaux marins. En 2050, si aucune mesure n'est prise, la pollution pourrait rendre certaines zones totalement impropres à la vie, affectant aussi la pêche et l'accès à l'eau potable pour les habitants."
+                 data-img="https://t4.ftcdn.net/jpg/06/49/97/61/360_F_649976191_Zqncvnaveh5GCRSNvgOYIQEuQQb1gvwl.jpg">
+                <img src="https://t4.ftcdn.net/jpg/06/49/97/61/360_F_649976191_Zqncvnaveh5GCRSNvgOYIQEuQQb1gvwl.jpg" alt="Pollution" style="width:220px; border-radius:12px; box-shadow:0 2px 12px #e53935;">
+                <span style="margin-top:8px; color:#b71c1c; font-weight:bold;">Pollution</span>
+            </div>
+            <div class="info-img"
+                 data-title="Algues invasives"
+                 data-text="La prolifération d'algues invasives étouffe les récifs et perturbe la chaîne alimentaire marine."
+                 data-extra="Exemple : Les algues invasives, favorisées par la pollution et le réchauffement climatique, recouvrent les coraux et empêchent la lumière d'atteindre les fonds marins. Cela provoque la disparition des poissons et crustacés qui dépendent des récifs, menaçant la pêche et l'équilibre écologique de tout le lagon calédonien."
+                 data-img="https://www.dnc.nc/wp-content/uploads/2020/07/15-Algues-hippodrome.jpg">
+                <img src="https://www.dnc.nc/wp-content/uploads/2020/07/15-Algues-hippodrome.jpg" alt="Algues invasives" style="width:220px; border-radius:12px; box-shadow:0 2px 12px #e53935;">
+                <span style="margin-top:8px; color:#b71c1c; font-weight:bold;">Algues invasives</span>
+            </div>
+            <div class="info-img"
+                 data-title="Incendies"
+                 data-text="Les feux de brousse fréquents détruisent la végétation, appauvrissent les sols et menacent la faune."
+                 data-extra="Exemple : Les incendies, de plus en plus fréquents à cause de la sécheresse et du changement climatique, ravagent des milliers d'hectares chaque année. Ils détruisent les habitats naturels, tuent des animaux et rendent les sols stériles, ce qui complique la régénération des forêts et menace la sécurité alimentaire des populations locales."
+                 data-img="https://www.mata-i-nautisme.fr/wp-content/uploads/2018/08/incendies-en-nouvelle-caledonie-5.jpg">
+                <img src="https://www.mata-i-nautisme.fr/wp-content/uploads/2018/08/incendies-en-nouvelle-caledonie-5.jpg" alt="Incendies" style="width:220px; border-radius:12px; box-shadow:0 2px 12px #e53935;">
+                <span style="margin-top:8px; color:#b71c1c; font-weight:bold;">Incendies</span>
+            </div>
+        </div>
+        <!-- Carte d'information -->
+        <div id="infoCard" class="info-card" style="display:none;">
+            <div class="info-card-content">
+                <span id="infoCardClose" class="info-card-close">&times;</span>
+                <img id="infoCardImg" src="" alt="" style="width:100%; max-width:400px; border-radius:14px; box-shadow:0 2px 16px #e53935; margin-bottom:18px;">
+                <h3 id="infoCardTitle" style="color:#e53935; font-size:2em; margin-bottom:10px;"></h3>
+                <p id="infoCardText" style="font-size:1.25em; color:#222; margin-bottom:18px;"></p>
+                <div id="infoCardExtra" style="font-size:1.1em; color:#185a9d; background:#eafaf1; border-radius:10px; padding:14px; margin-bottom:8px;"></div>
+                <div style="font-size:1.15em; color:#b71c1c; font-weight:bold; margin-top:10px;">
+                </div>
+            </div>
+        </div>
+        <ul style="font-size:1.15em; color:#b71c1c; font-weight:bold; background:rgba(255,255,255,0.6); border-radius:10px; padding:18px;">
+            <li>Disparition de nombreuses espèces animales et végétales</li>
+            <li>Océans pollués, coraux morts</li>
+            <li>Terres infertiles, feux de brousse fréquents</li>
+            <li>Perte de ressources pour les générations futures</li>
+        </ul>
+        <div style="margin-top:32px; text-align:center;">
+            <span style="font-size:1.3em; color:#e53935; font-weight:bold; text-shadow:1px 1px 8px #fff;">
+                Il est encore temps d'agir !<br>
+                <span style="color:#185a9d;">Protégeons nos réserves naturelles !</span>
+            </span>
+        </div>
+        <div style="text-align:center; margin-top:32px;">
+            <button class="start-btn" onclick="backToPresentation()" style="background:#185a9d;">Retour à l'accueil</button>
+        </div>
+    </div>
+ 
+    <script>
+        let slides = Array.from(document.querySelectorAll('.bg-slide:not(.bg-chaos)'));
+        let chaosSlides = Array.from(document.querySelectorAll('.bg-slide.bg-chaos'));
+        let currentSlide = 0;
+        let intervalId;
+ 
+        function startSlideshow(slidesToShow) {
+            // Cache tout
+            document.querySelectorAll('.bg-slide').forEach(s => {
+                s.classList.remove('active');
+                s.style.display = 'none';
+            });
+            // Affiche le bon groupe
+            slidesToShow.forEach(s => s.style.display = 'block');
+            // Active la première
+            currentSlide = 0;
+            slidesToShow[currentSlide].classList.add('active');
+            // Lance le slideshow
+            if (intervalId) clearInterval(intervalId);
+            intervalId = setInterval(() => {
+                slidesToShow[currentSlide].classList.remove('active');
+                currentSlide = (currentSlide + 1) % slidesToShow.length;
+                slidesToShow[currentSlide].classList.add('active');
+            }, 4000);
+        }
+ 
+    // Démarre le slideshow normal au chargement
+    window.onload = () => {
+        slides = Array.from(document.querySelectorAll('.bg-slide:not(.bg-chaos)'));
+        startSlideshow(slides);
+    };
+        // Affiche la page principale et cache la présentation
+        function showMainContent() {
+            document.getElementById('presentation').classList.add('hidden');
+            document.getElementById('mainContent').classList.remove('hidden');
+            document.getElementById('chaos2050').classList.add('hidden');
+            slides = Array.from(document.querySelectorAll('.bg-slide:not(.bg-chaos)'));
+            startSlideshow(slides);
+            setTimeout(initCharts, 200);
+        }
+ 
+        // Affiche la page chaos 2050
+        function showChaosPage() {
+                document.getElementById('presentation').classList.add('hidden');
+                document.getElementById('mainContent').classList.add('hidden');
+                document.getElementById('chaos2050').classList.remove('hidden');
+                chaosSlides = Array.from(document.querySelectorAll('.bg-slide.bg-chaos'));
+                startSlideshow(chaosSlides);
+        }
+ 
+        // Retour à la présentation
+        function backToPresentation() {
+            document.getElementById('presentation').classList.remove('hidden');
+            document.getElementById('mainContent').classList.add('hidden');
+            document.getElementById('chaos2050').classList.add('hidden');
+            slides = Array.from(document.querySelectorAll('.bg-slide:not(.bg-chaos)'));
+            startSlideshow(slides);
+        }  
+ 
+        // Initialise les graphiques
+        function initCharts() {
+            // Pie Chart
+            new Chart(document.getElementById('pieChart'), {
+                type: 'pie',
+                data: {
+                    labels: ['Forêts', 'Récifs', 'Espèces protégées'],
+                    datasets: [{
+                        data: [40, 35, 25],
+                        backgroundColor: ['#43cea2', '#185a9d', '#f7971e']
+                    }]
+                },
+                options: {
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Répartition des zones protégées'
+                        },
+                        legend: {
+                            position: 'bottom'
+                        }
+                    }
+                }
+            });
+ 
+            // Bar Chart
+            new Chart(document.getElementById('barChart'), {
+                type: 'bar',
+                data: {
+                    labels: ['2015', '2020', '2025'],
+                    datasets: [{
+                        label: 'Nombre de réserves',
+                        data: [12, 18, 24],
+                        backgroundColor: '#185a9d'
+                    }]
+                },
+                options: {
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Évolution du nombre de réserves'
+                        },
+                        legend: { display: false }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: { stepSize: 2 }
+                        }
+                    }
+                }
+            });
+ 
+            // Line Chart
+            new Chart(document.getElementById('lineChart'), {
+                type: 'line',
+                data: {
+                    labels: ['Jan', 'Fév', 'Mar', 'Avr', 'Mai', 'Juin'],
+                    datasets: [{
+                        label: 'Visiteurs dans les réserves (en milliers)',
+                        data: [2, 3, 4, 6, 5, 7],
+                        fill: true,
+                        borderColor: '#43cea2',
+                        backgroundColor: 'rgba(67,206,162,0.15)',
+                        tension: 0.3,
+                        pointBackgroundColor: '#185a9d'
+                    }]
+                },
+                options: {
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Visiteurs mensuels dans les réserves'
+                        },
+                        legend: { display: true, position: 'bottom' }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        }
+    </script>
+    <!-- Ajoute ce style à la fin de ton <style> -->
+    <style>
+        .info-card {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: #fff;
+            border-radius: 22px;
+            box-shadow: 0 12px 48px #e53935a0;
+            z-index: 9999;
+            width: 320px;
+            min-width: 0;
+            max-width: 90vw;
+            padding: 18px 12px 18px 12px;
+            border: 3px solid #e53935;
+            animation: fadeIn 0.3s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+        .info-card-content {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+        }
+        .info-card-close {
+            position: absolute;
+            top: 8px; right: 12px;
+            font-size: 2em;
+            color: #e53935;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        #infoCardImg {
+            max-width: 220px;
+            margin-bottom: 12px;
+            margin-top: 12px;
+        }
+        #infoCardTitle {
+            color: #e53935;
+            font-size: 2em;
+            margin-bottom: 10px;
+            margin-top: 0;
+        }
+        #infoCardText {
+            font-size: 1.25em;
+            color: #222;
+            margin-bottom: 18px;
+            margin-top: 0;
+        }
+        #infoCardExtra {
+            font-size: 1.1em;
+            color: #185a9d;
+            background: #eafaf1;
+            border-radius: 10px;
+            padding: 14px;
+            margin-bottom: 8px;
+            margin-top: 0;
+        }
+        @media (max-width: 600px) {
+            .info-card { width: 98vw; min-width: 0; padding: 18px 6vw; }
+            #infoCardImg { max-width: 90vw; }
+        }
+    </style>
+    <!-- Ajoute ce JS à la fin de ton <script> -->
+    <script>
+document.querySelectorAll('.info-img').forEach(function(div) {
+    div.addEventListener('click', function() {
+        document.getElementById('infoCardTitle').textContent = div.getAttribute('data-title');
+        document.getElementById('infoCardText').textContent = div.getAttribute('data-text');
+        document.getElementById('infoCardExtra').textContent = div.getAttribute('data-extra') || '';
+        document.getElementById('infoCardImg').src = div.getAttribute('data-img') || div.querySelector('img').src;
+        document.getElementById('infoCardImg').alt = div.getAttribute('data-title');
+        document.getElementById('infoCard').style.display = 'block';
+    });
+});
+document.getElementById('infoCardClose').onclick = function() {
+    document.getElementById('infoCard').style.display = 'none';
+};
+document.getElementById('infoCard').onclick = function(e) {
+    if (e.target === this) this.style.display = 'none';
+};
+</script>
+<!-- Ajout des styles et scripts pour les boutons supplémentaires -->
+<style>
+.small-btn {
+    background: #185a9d;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    padding: 4px 12px;
+    font-size: 0.95em;
+    cursor: pointer;
+    margin-bottom: 12px;
+    margin-right: 8px;
+    box-shadow: 0 2px 8px rgba(24,90,157,0.10);
+    position: absolute;
+    top: 18px;
+    left: 18px;
+    z-index: 10;
+}
+.small-btn:hover {
+    background: #43cea2;
+    color: #185a9d;
+}
+</style>
+</body>
+</html>
+ 
+ 
+ 
