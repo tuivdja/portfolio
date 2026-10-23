@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Fiche détaillée d'un projet — Portfolio de Fuahea Tuihaatala, BTS SIO" />
+  <title>Projet — Fuahea Tuihaatala</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+
+  <!-- Coloration syntaxique des extraits de code -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css" />
+
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body class="page-projet">
+
+  <!-- Navigation simplifiée -->
+  <header class="nav nav--solid" role="banner">
+    <a href="index.html" class="nav__logo">
+      <span class="nav__logo-initial">F</span>
+      <span class="nav__logo-name">Portfolio</span>
+    </a>
+    <nav class="nav__links" role="navigation" aria-label="Navigation principale">
+      <a href="index.html#about" class="nav__link">À propos</a>
+      <a href="index.html#skills" class="nav__link">Compétences</a>
+      <a href="index.html#projects" class="nav__link">Projets</a>
+      <a href="index.html#contact" class="nav__link">Contact</a>
+    </nav>
+  </header>
+
+  <main id="projetRoot" class="projet">
+    <!-- Contenu injecté par projet.js -->
+    <div class="container projet__loading">Chargement du projet…</div>
+  </main>
+
+  <footer class="footer" role="contentinfo">
+    <div class="footer__inner">
+      <div class="footer__brand">
+        <span class="footer__logo">FT</span>
+        <p class="footer__tagline">BTS SIO · Nouvelle-Calédonie</p>
+      </div>
+      <p class="footer__copy">© <span id="year"></span> Fuahea Tuihaatala</p>
+    </div>
+  </footer>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+  <script src="projets-data.js"></script>
+  <script src="projet.js"></script>
+</body>
+</html>
