@@ -32,7 +32,7 @@ const PROJETS = {
     badge: 'DataViz',
     categorie: 'dv',
     accroche: "Page de sensibilisation réalisée en équipe pour le Pacific Dataviz Challenge (thème « Blue Pacific 2050 ») : trois graphiques interactifs et un scénario « Et si on ne fait rien ? » pour défendre les réserves naturelles de Nouvelle-Calédonie.",
-    image: '../images/dataviz.png',
+    image: 'images/dataviz.png',
     imageAlt: 'Logo du Pacific Dataviz Challenge',
     imageLogo: true,
     lien: { url: 'dataviz.html', label: 'Ouvrir le projet', externe: true },
