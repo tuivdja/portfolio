@@ -169,6 +169,13 @@
     </div>
     <p class="visually-hidden" id="copieStatut" role="status" aria-live="polite"></p>`;
 
+  /* ---- Captures d'écran : masquées si le fichier image n'existe pas encore ---- */
+  racine.querySelectorAll('.code__capture img').forEach(img => {
+    const masquer = () => { img.closest('.code__capture').hidden = true; };
+    if (img.complete && img.naturalWidth === 0) masquer();
+    else img.addEventListener('error', masquer);
+  });
+
   /* ---- Coloration syntaxique ---- */
   if (window.hljs) {
     racine.querySelectorAll('pre code').forEach(bloc => window.hljs.highlightElement(bloc));
@@ -271,6 +278,11 @@
           ${e.description ? `<p class="code__desc">${echapper(e.description)}</p>` : ''}
           ${badgeStatut(e.statut)}
         </div>
+        ${e.capture && e.capture.src ? `
+          <figure class="code__capture">
+            <img src="${echapper(urlSure(e.capture.src))}" alt="${echapper(e.capture.alt || '')}" decoding="async">
+            ${e.capture.legende ? `<figcaption>${echapper(e.capture.legende)}</figcaption>` : ''}
+          </figure>` : ''}
         <div class="code__block">
           <div class="code__bar">
             <span class="code__file">${echapper(e.fichier)}</span>

@@ -1077,6 +1077,92 @@ ul { list-style: none; }
 }
 .veille-card__text { font-size: 0.88rem; color: var(--text-secondary); line-height: 1.65; }
 
+/* Dernières actualités */
+.veille-actus { margin-top: 3.5rem; }
+.veille-actus__heading {
+  font-family: var(--font-display);
+  font-size: 1.75rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 1.25rem;
+}
+.veille-actu {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--aqua);
+  border-radius: 14px;
+  padding: 1.75rem 2rem;
+}
+.veille-actu + .veille-actu { margin-top: 1.25rem; }
+.veille-actu__meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.85rem;
+}
+.veille-actu__meta time {
+  font-size: 0.8rem;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--coral);
+  margin-right: 0.5rem;
+}
+.veille-actu__title {
+  font-size: 1.15rem;
+  font-weight: 500;
+  line-height: 1.45;
+  color: var(--text-primary);
+  margin-bottom: 0.75rem;
+}
+.veille-actu__text {
+  font-size: 0.92rem;
+  color: var(--text-secondary);
+  line-height: 1.7;
+  margin-bottom: 1rem;
+}
+.veille-actu__text strong { color: var(--text-primary); font-weight: 500; }
+.veille-actu__timeline {
+  display: grid;
+  gap: 0.6rem;
+  margin-bottom: 1.25rem;
+  padding-left: 1rem;
+  border-left: 1px solid var(--border-hover);
+}
+.veille-actu__timeline li {
+  display: grid;
+  grid-template-columns: 7.5rem 1fr;
+  gap: 0.75rem;
+  font-size: 0.88rem;
+  line-height: 1.6;
+  color: var(--text-secondary);
+}
+.veille-actu__timeline strong { color: var(--aqua-pale); font-weight: 500; }
+.veille-actu__timeline sup { font-size: 0.7em; line-height: 0; }
+.veille-actu__takeaway {
+  font-size: 0.92rem;
+  line-height: 1.7;
+  color: var(--text-primary);
+  background: rgba(0, 180, 216, 0.06);
+  border-radius: 8px;
+  padding: 0.85rem 1rem;
+  margin-bottom: 1rem;
+}
+.veille-actu__takeaway strong { font-weight: 500; color: var(--aqua-pale); }
+.veille-actu__sources { font-size: 0.82rem; color: var(--text-muted); }
+.veille-actu__sources a {
+  color: var(--aqua);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.veille-actu__sources a:hover { color: var(--aqua-pale); }
+
+@media (max-width: 600px) {
+  .veille-actu { padding: 1.5rem 1.25rem; }
+  .veille-actu__timeline li { grid-template-columns: 1fr; gap: 0.1rem; }
+}
+
 /* ---- 13. Section Contact ---- */
 .contact { background: var(--bg-secondary); }
 .contact__grid {
@@ -1713,7 +1799,7 @@ body.page-projet button { cursor: pointer; }
 }
 .projet__apercu img { display: block; width: 100%; height: auto; }
 
-.projet__corps { padding: 3rem 0 5rem; }
+.projet__corps { padding-top: 3rem; padding-bottom: 5rem; } /* garde les marges latérales de .container */
 
 .projet__meta {
   display: grid;
@@ -2523,3 +2609,250 @@ a.tool-chip__inner:hover { border-color: var(--coral); color: var(--coral-light)
   color: var(--text-secondary);
 }
 .code__explication li::marker { color: var(--coral); font-weight: 600; }
+
+/* ============================================================
+   PATRIMOINE INFORMATIQUE (version courte pour l'oral)
+   Tableau d'inventaire, cartes de gestion, prochaine action
+   ============================================================ */
+.patrimoine { background: var(--bg-secondary); }
+
+/* Tableau d'inventaire */
+.inventaire-wrap {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  overflow: hidden;
+}
+.inventaire {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.88rem;
+  line-height: 1.5;
+}
+.inventaire th,
+.inventaire td {
+  padding: 0.7rem 1rem;
+  text-align: left;
+  vertical-align: top;
+}
+.inventaire thead th {
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  background: rgba(0, 180, 216, 0.05);
+  border-bottom: 1px solid var(--border-hover);
+}
+.inventaire__group th {
+  padding-top: 1.2rem;
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--aqua-pale);
+  border-top: 1px solid var(--border);
+}
+.inventaire tbody:first-of-type .inventaire__group th { border-top: 0; }
+.inventaire td {
+  color: var(--text-secondary);
+  border-top: 1px solid rgba(0, 180, 216, 0.07);
+}
+.inventaire__name {
+  font-weight: 500;
+  color: var(--text-primary);
+  border-top: 1px solid rgba(0, 180, 216, 0.07);
+}
+.inventaire td.inventaire__version {
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+  color: var(--text-primary);
+}
+.inventaire__place { white-space: nowrap; }
+.inventaire tbody tr:not(.inventaire__group):hover > * { background: rgba(0, 180, 216, 0.04); }
+
+/* Pastilles de licence */
+.licence {
+  display: inline-block;
+  padding: 0.15rem 0.6rem;
+  border: 1px solid;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  white-space: nowrap;
+}
+.licence--libre   { color: #74c69d;            border-color: rgba(64, 145, 108, 0.5);  background: rgba(64, 145, 108, 0.12); }
+.licence--gratuit { color: var(--aqua-pale);   border-color: rgba(0, 180, 216, 0.35);  background: rgba(0, 180, 216, 0.08); }
+.licence--service { color: var(--coral-light); border-color: rgba(224, 122, 95, 0.4); background: rgba(224, 122, 95, 0.08); }
+.licence--proprio { color: var(--sand);        border-color: rgba(244, 233, 216, 0.3); background: rgba(244, 233, 216, 0.06); }
+
+/* Cartes de gestion : une phrase par attendu du référentiel */
+.patrimoine__subhead { margin-top: 3.5rem; }
+
+.gestion__grid {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+}
+.gestion-card {
+  display: flex;
+  flex-direction: column;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 1.3rem 1.3rem 1.2rem;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+.gestion-card:hover {
+  border-color: var(--border-hover);
+  box-shadow: 0 12px 40px rgba(0, 180, 216, 0.08);
+}
+.gestion-card__head {
+  display: flex;
+  align-items: baseline;
+  gap: 0.65rem;
+  margin-bottom: 0.55rem;
+}
+.gestion-card__num {
+  font-family: var(--font-display);
+  font-size: 1.4rem;
+  font-weight: 700;
+  line-height: 1;
+  color: var(--coral);
+}
+.gestion-card__title {
+  font-size: 1rem;
+  font-weight: 500;
+  line-height: 1.35;
+  color: var(--text-primary);
+}
+.gestion-card__text {
+  font-size: 0.88rem;
+  line-height: 1.6;
+  color: var(--text-secondary);
+}
+.gestion-card__proof {
+  margin-top: auto;
+  padding-top: 0.8rem;
+  align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--aqua);
+  transition: color 0.25s;
+}
+.gestion-card__proof svg {
+  width: 14px;
+  height: 14px;
+  transition: transform 0.25s var(--ease);
+}
+.gestion-card__proof:hover { color: var(--aqua-pale); }
+.gestion-card__proof:hover svg { transform: translateX(3px); }
+
+/* Prochaine action */
+.patrimoine__todo {
+  margin-top: 2rem;
+  padding: 1rem 1.3rem;
+  background: rgba(224, 122, 95, 0.06);
+  border: 1px solid rgba(224, 122, 95, 0.25);
+  border-left: 3px solid var(--coral);
+  border-radius: 12px;
+  font-size: 0.9rem;
+  line-height: 1.6;
+  color: var(--text-secondary);
+}
+.patrimoine__todo strong { font-weight: 500; color: var(--coral-light); }
+
+/* Tablette : cartes sur deux colonnes */
+@media (max-width: 900px) {
+  .gestion__grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+/* Mobile : chaque ligne du tableau devient une fiche */
+@media (max-width: 760px) {
+  .inventaire-wrap {
+    background: none;
+    border: 0;
+    border-radius: 0;
+    overflow: visible;
+  }
+  .inventaire,
+  .inventaire tbody,
+  .inventaire tr,
+  .inventaire th,
+  .inventaire td { display: block; width: 100%; }
+  .inventaire thead {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+  }
+  .inventaire tbody + tbody { margin-top: 1.5rem; }
+  .inventaire__group th { padding: 0 0 0.6rem; border-top: 0; }
+  .inventaire tbody tr:not(.inventaire__group) {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 0.9rem 1rem;
+    margin-bottom: 0.75rem;
+  }
+  .inventaire tbody tr:not(.inventaire__group):hover > * { background: none; }
+  .inventaire th.inventaire__name { padding: 0 0 0.45rem; border-top: 0; font-size: 0.95rem; }
+  .inventaire td {
+    display: grid;
+    grid-template-columns: 6.5rem 1fr;
+    gap: 0.75rem;
+    padding: 0.25rem 0;
+    border-top: 0;
+    white-space: normal;
+  }
+  .inventaire td::before {
+    content: attr(data-label);
+    padding-top: 0.1rem;
+    font-size: 0.7rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+  .licence { justify-self: start; }
+  .gestion__grid { grid-template-columns: 1fr; }
+}
+
+/* Navigation : 8 liens depuis l'ajout de « Patrimoine ».
+   Liens resserrés sur écran moyen, menu burger sous 1024px. */
+@media (max-width: 1180px) {
+  .nav__links { gap: 1.5rem; }
+}
+@media (max-width: 1024px) {
+  .nav__links { display: none; }
+  .nav__burger { display: flex; }
+}
+
+/* ============================================================
+   FICHE PROJET — capture d'écran au-dessus d'un extrait de code
+   ============================================================ */
+.code__capture {
+  margin: 0 0 1.25rem;
+  padding: 1rem;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+}
+.code__capture img {
+  margin: 0 auto;
+  width: auto;
+  max-width: 100%;
+  max-height: 460px;
+  border-radius: 8px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+}
+.code__capture figcaption {
+  margin-top: 0.8rem;
+  font-size: 0.85rem;
+  line-height: 1.55;
+  text-align: center;
+  color: var(--text-secondary);
+}
