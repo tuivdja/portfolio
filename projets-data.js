@@ -201,52 +201,45 @@ new Chart(document.getElementById('barChart'), {
     ],
     code: [
       {
-        fichier: 'CompteRepository.java',
+        fichier: 'ServeurComptes.java',
         langage: 'java',
         statut: 'projet',
-        description: "Injection du serveur par le constructeur et calcul de l'empreinte du mot de passe (extrait).",
-        source: `public final class CompteRepository {
+        description: "Le contrat que doit respecter tout serveur de comptes : inscription, connexion, profil (extrait).",
+        source: `interface ServeurComptes {
 
-    private static final String ALGO = "PBKDF2WithHmacSHA256";
-    private static final int ITERATIONS = 64_000;
-    private static final int TAILLE_SEL = 16;
-    private static final int TAILLE_CLE_BITS = 256;
+    /** Crée le compte d'authentification et ouvre sa session. */
+    void inscrire(String email, String motDePasse, String nomAffiche) throws ServeurException;
 
-    /** {@code null} : comptes uniquement locaux. */
-    private final ServeurComptes serveur;
+    /** Ouvre une session avec des identifiants existants. */
+    void connecter(String email, String motDePasse) throws ServeurException;
 
-    public CompteRepository(Context context) {
-        this(context, ApiConfig.comptesEnLigne() ? NeonServeurComptes.obtenir(context) : null);
-    }
+    /** Profil de la session ouverte, ou {@code null} s'il n'a pas encore été créé. */
+    Utilisateur lireProfil() throws ServeurException;
 
-    /** Pour les tests : serveur simulé, ou {@code null} pour le mode local. */
-    CompteRepository(Context context, ServeurComptes serveur) {
-        this.app = context.getApplicationContext();
-        this.prefs = app.getSharedPreferences(PREFS, Context.MODE_PRIVATE);
-        this.serveur = serveur;
-    }
+    // … creerProfil, modifierProfil, changerMotDePasse, supprimerCompte, deconnecter
 
-    // …
+    /** Échec d'un appel au serveur, classé pour l'affichage. */
+    final class ServeurException extends Exception {
 
-    private static byte[] deriver(String motDePasse, byte[] sel) throws Exception {
-        char[] caracteres = motDePasse == null ? new char[0] : motDePasse.toCharArray();
-        KeySpec spec = new PBEKeySpec(caracteres, sel, ITERATIONS, TAILLE_CLE_BITS);
-        try {
-            return SecretKeyFactory.getInstance(ALGO).generateSecret(spec).getEncoded();
-        } finally {
-            Arrays.fill(caracteres, '\\0');
+        enum Code { EMAIL_PRIS, IDENTIFIANTS, SESSION_EXPIREE, RESEAU, AUTRE }
+
+        final Code code;
+
+        ServeurException(Code code, String message) {
+            super(message);
+            this.code = code;
         }
     }
 }`,
         capture: {
           src: 'images/projets/moncaillou-inscription.png',
           alt: "Écran « Créer un compte » de l'application Mon Caillou : nom, prénom, e-mail, téléphone, mot de passe et confirmation",
-          legende: "Écran « Créer un compte » : le mot de passe saisi ici n'est jamais enregistré en clair."
+          legende: "Écran « Créer un compte » : l'inscription passe par la méthode inscrire() de cette interface."
         },
         explication: [
-          "L'attribut serveur est de type ServeurComptes (une interface) : le Repository fonctionne aussi bien avec Neon qu'avec le faux serveur des tests (polymorphisme).",
-          "deriver() calcule l'empreinte PBKDF2 du mot de passe avec un sel et 64 000 itérations ; elle est private static, donc invisible pour les écrans (encapsulation).",
-          "Le bloc finally efface le mot de passe de la mémoire (Arrays.fill), même si le calcul échoue."
+          "Une interface ne contient que des signatures : elle dit ce qu'un serveur de comptes sait faire (inscrire, connecter, lire le profil), pas comment il le fait.",
+          "Le vrai serveur Neon et le faux serveur des tests respectent tous les deux cette interface : l'application fonctionne avec l'un ou l'autre sans changer de code (polymorphisme).",
+          "throws ServeurException oblige à prévoir l'échec. L'exception porte un code (EMAIL_PRIS, IDENTIFIANTS, RESEAU…) que l'écran traduit en message clair."
         ]
       },
       {
